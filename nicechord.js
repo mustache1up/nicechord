@@ -1,40 +1,40 @@
 var chordMapping = {
-    "a": {
-        "maj": "KeyQ",
-        "min": "KeyA",
-        "maj7": "KeyZ",
-    },
-    "bb": {
-        "maj": "KeyW",
-        "min": "KeyS",
-        "maj7": "KeyX",
-    },
-}
-
-var chordMappingReverse = {
-    "KeyQ": {
+    "Digit1": {
         "chordName": "a",
         "buttonType": "maj",
     },
-    "KeyA": {
+    "KeyQ": {
         "chordName": "a",
         "buttonType": "min",
     },
-    "KeyZ": {
+    "KeyA": {
         "chordName": "a",
         "buttonType": "maj7",
     },
 
-    "KeyW": {
+    "Digit2": {
         "chordName": "bb",
         "buttonType": "maj",
     },
-    "KeyS": {
+    "KeyW": {
         "chordName": "bb",
         "buttonType": "min",
     },
-    "KeyX": {
+    "KeyS": {
         "chordName": "bb",
+        "buttonType": "maj7",
+    },
+
+    "Digit3": {
+        "chordName": "b",
+        "buttonType": "maj",
+    },
+    "KeyE": {
+        "chordName": "b",
+        "buttonType": "min",
+    },
+    "KeyD": {
+        "chordName": "b",
         "buttonType": "maj7",
     },
 }
@@ -55,11 +55,12 @@ document.addEventListener('keydown', handleKeyDown);
 document.addEventListener('keyup', handleKeyUp);
 
 function handleKeyDown(event) {
+    lastE = event
     if(currentPressedKeys[event.code]) {
         return
     }
     currentPressedKeys[event.code] = true
-    const x = chordMappingReverse[event.code]
+    const x = chordMapping[event.code]
     if(!x) {
         return
     }
@@ -70,13 +71,13 @@ function handleKeyDown(event) {
             "min": false,
             "maj7": false,
         }
+        // reset all pressed keys?
     }
     currentChordName = x.chordName
     currentChordPressedButtons[x.buttonType] = true
     currentChordVariation = evaluateChordVariation()
 
     document.querySelectorAll('#current-chord')[0].textContent = currentChordPrettyName()
-    // lastE = event
     // pressedChordButtons[event.code] = {}
 
     document.querySelectorAll('#chord-btn-' + x.chordName + '-' + x.buttonType)[0].style.border = '1px solid orange'
@@ -88,7 +89,7 @@ function handleKeyDown(event) {
 
 function handleKeyUp(event) {
     currentPressedKeys[event.code] = false
-    const x = chordMappingReverse[event.code]
+    const x = chordMapping[event.code]
     if(!x) {
         return
     }
@@ -143,7 +144,7 @@ function currentChordPrettyName() {
             variation = 'aug'
             break;
     }
-    return chordRoot + variation || '-'
+    return chordRoot + variation
 }
 
 function evaluateChordVariation() {
