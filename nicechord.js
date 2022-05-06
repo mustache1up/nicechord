@@ -4,7 +4,7 @@ var chordMapping = {
         "min": "KeyA",
         "maj7": "KeyZ",
     },
-    "a#": {
+    "bb": {
         "maj": "KeyW",
         "min": "KeyS",
         "maj7": "KeyX",
@@ -26,15 +26,15 @@ var chordMappingReverse = {
     },
 
     "KeyW": {
-        "chordName": "a#",
+        "chordName": "bb",
         "buttonType": "maj",
     },
     "KeyS": {
-        "chordName": "a#",
+        "chordName": "bb",
         "buttonType": "min",
     },
     "KeyX": {
-        "chordName": "a#",
+        "chordName": "bb",
         "buttonType": "maj7",
     },
 }
@@ -74,8 +74,13 @@ function handleKeyDown(event) {
     currentChordName = x.chordName
     currentChordPressedButtons[x.buttonType] = true
     currentChordVariation = evaluateChordVariation()
+
+    document.querySelectorAll('#current-chord')[0].textContent = currentChordPrettyName()
     // lastE = event
     // pressedChordButtons[event.code] = {}
+
+    document.querySelectorAll('#chord-btn-' + x.chordName + '-' + x.buttonType)[0].style.border = '1px solid orange'
+
     console.log("currentChordName -> " + currentChordName)
     console.log("currentChordPressedButtons -> ", currentChordPressedButtons)
     console.log("currentChordVariation -> " + currentChordVariation)
@@ -93,14 +98,52 @@ function handleKeyUp(event) {
     }
     currentChordPressedButtons[x.buttonType] = false
     currentChordVariation = evaluateChordVariation()
+    
     if(!currentChordVariation) { // && hold chord false
         currentChordName = null
     }
+
+    document.querySelectorAll('#current-chord')[0].textContent = currentChordPrettyName()
     // lastE = event
     // pressedChordButtons[event.code] = undefined
+
+    document.querySelectorAll('#chord-btn-' + x.chordName + '-' + x.buttonType)[0].style.border = '1px dotted gray'
+
     console.log("currentChordName -> " + currentChordName)
     console.log("currentChordPressedButtons -> ", currentChordPressedButtons)
     console.log("currentChordVariation -> " + currentChordVariation)
+}
+
+function currentChordPrettyName() {
+    if(!currentChordName) {
+        return "-"
+    }
+    const chordRoot = currentChordName.charAt(0).toUpperCase() + currentChordName.slice(1)
+    var variation = null
+    switch (currentChordVariation) {
+        case 'maj':
+            variation = ''
+            break;
+        case 'min':
+            variation = 'm'
+            break;
+        case 'maj7':
+            variation = '7'
+            break;
+        case 'maj7+':
+            variation = '7+'
+            break;
+        case 'min7':
+            variation = 'm7'
+            break;
+        case 'dim':
+            variation = 'dim'
+            break;
+        case 'aug':
+            variation = 'aug'
+            break;
+    }
+    return chordRoot + variation || '-'
 }
 
 function evaluateChordVariation() {

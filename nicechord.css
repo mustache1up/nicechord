@@ -1,4 +1,20 @@
+.chord-btn-col {
 
+    display: inline-block;
+
+}
+
+.chord-btn {
+
+    border-style: dotted;
+    border-width: 1px;
+    border-radius: 5px;
+    border-color: gray;
+    color: antiquewhite;
+    height: 30px;
+    width: 20px;
+
+}
 .centered {
 
     position: fixed;
